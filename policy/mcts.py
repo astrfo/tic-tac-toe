@@ -42,7 +42,13 @@ class MonteCarloTreeSearch:
 
     def backup(self, reward):
         #シミュレーションされて生成された収益を用いて，遷移軌跡の終端状態からバッグアップする
-        pass
+        self.visits += 1
+        self.wins += reward
+        if self.parent is not None:
+            #親ノードがある場合は伝播させる
+            pass
 
     def best_child(self):
-        pass
+        #子ノードの中で一番良いノードを選択
+        choices_weights = [(c.wins / c.visits) + np.sqrt((2 * np.log(self.visits) / c.visits)) for c in self.children]
+        return self.children[np.where(max(choices_weights) == choices_weights)[0]]
