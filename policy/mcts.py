@@ -20,12 +20,13 @@ class MonteCarloTreeSearch:
 
     def rollout(self):
         #シミュレーションフェーズで使用．とりあえずランダム方策(ロールアウト方策)を実装
-        while not self.env.is_terminal() and not self.env.is_draw():
-            actions = self.env.get_valid_actions()
+        copy_env = self.env.copy()
+        while not copy_env.is_terminal():
+            actions = copy_env.get_valid_actions()
             action = random.choice(actions)
-            self.env.play(action)
+            copy_env.play(action)
         #終端状態時のプレイヤーが勝っていたら報酬1
-        return 1 if self.env.is_winner(self.env.player) else 0
+        return 1 if copy_env.is_winner(copy_env.player) else 0
 
     def select(self):
         #根ノードから開始して，UCT方策(ツリー方策)を用いて葉ノードに向かって行動選択
@@ -43,8 +44,9 @@ class MonteCarloTreeSearch:
         #選択された葉ノードから未探索の行動を取ることで子ノードを追加して，木を拡張する
         untried_actions = [a for a in self.env.get_valid_actions() if a not in [c.env.board for c in self.children]]
         action = random.choice(untried_actions)
-        self.env.play(action)
-        new_child = MonteCarloTreeSearch(self.env, parent=None)
+        child_env = self.env.copy()
+        child_env.play(action)
+        new_child = MonteCarloTreeSearch(child_env, parent=self)
         self.children.append(new_child)
         return new_child
 
