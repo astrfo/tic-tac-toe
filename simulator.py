@@ -8,7 +8,8 @@ class Simulator:
         self.policy = MonteCarloTreeSearch(self.env)
 
     def run(self):
-        while not self.env.is_terminal() and not self.env.is_draw():
+        self.env.reset()
+        while not self.env.is_terminal():
+            print(self.env.board)
             action = self.policy.uct_search()
             self.env.play(action)
-            print(self.env.board)
