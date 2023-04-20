@@ -16,8 +16,7 @@ class MonteCarloTreeSearch:
             reward = selected_node.rollout()
             selected_node.backup(reward)
         best_child_node = self.best_child()
-        return action
-        # return best_child_node.env.last_action
+        return best_child_node.env.last_action
 
     def rollout(self):
         #シミュレーションフェーズで使用．とりあえずランダム方策(ロールアウト方策)を実装
@@ -42,7 +41,12 @@ class MonteCarloTreeSearch:
 
     def expand(self):
         #選択された葉ノードから未探索の行動を取ることで子ノードを追加して，木を拡張する
-        pass
+        untried_actions = [a for a in self.env.get_valid_actions() if a not in [c.env.board for c in self.children]]
+        action = random.choice(untried_actions)
+        self.env.play(action)
+        new_child = MonteCarloTreeSearch(self.env, parent=None)
+        self.children.append(new_child)
+        return new_child
 
     def backup(self, reward):
         #シミュレーションされて生成された収益を用いて，遷移軌跡の終端状態からバッグアップする
@@ -55,4 +59,5 @@ class MonteCarloTreeSearch:
     def best_child(self):
         #子ノードの中で一番良いノードを選択
         choices_weights = [(c.wins / c.visits) + np.sqrt((2 * np.log(self.visits) / c.visits)) for c in self.children]
-        return self.children[np.where(max(choices_weights) == choices_weights)[0]]
+        # return self.children[np.where(max(choices_weights) == choices_weights)[0]]
+        return self.children[np.argmax(choices_weights)]
