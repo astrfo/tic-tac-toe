@@ -12,10 +12,12 @@ class MonteCarloTreeSearch:
     def uct_search(self):
         #探索済みノードをどう選択していくかUCT方策(ツリー方策)を用いて選択(or拡張)andロールアウトandバックアップ
         for _ in range(1000):
-            self.select()
-            reward = self.rollout()
-            self.backup(reward)
-        # return self.best_child()の返り値でactionを返す？
+            selected_node = self.select()
+            reward = selected_node.rollout()
+            selected_node.backup(reward)
+        best_child_node = self.best_child()
+        return action
+        # return best_child_node.env.last_action
 
     def rollout(self):
         #シミュレーションフェーズで使用．とりあえずランダム方策(ロールアウト方策)を実装
@@ -28,13 +30,15 @@ class MonteCarloTreeSearch:
 
     def select(self):
         #根ノードから開始して，UCT方策(ツリー方策)を用いて葉ノードに向かって行動選択
-        while not self.env.is_terminal() and not self.env.is_draw():
+        current_node = self
+        while not current_node.env.is_terminal() and not current_node.env.is_draw():
             #子ノードの数よりも選択可能肢の方が多い場合は拡張
             #少ない場合は探索済みノードからUCT方策を用いて行動選択
-            if len(self.children) < len(self.env.get_valid_actions()):
-                self.expand()
+            if len(current_node.children) < len(current_node.env.get_valid_actions()):
+                return current_node.expand()
             else:
-                self.best_child()
+                current_node = current_node.best_child()
+        return current_node
 
     def expand(self):
         #選択された葉ノードから未探索の行動を取ることで子ノードを追加して，木を拡張する
