@@ -10,8 +10,7 @@ class TicTacToe:
         self.player = 1
 
     def play(self, action):
-        row = action // 3
-        col = action % 3
+        row, col = action
         if self.board[row, col] == 0:
             self.board[row, col] = self.player
             self.player = 3 - self.player
