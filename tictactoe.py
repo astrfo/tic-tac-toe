@@ -17,6 +17,8 @@ class TicTacToe:
             self.board[row, col] = self.player
             self.player = 3 - self.player
             self.last_action = action
+        else:
+            raise ValueError(f"Cell ({row}, {col}) is already occupied.")
 
     def get_valid_actions(self):
         return list(zip(*np.where(self.board == 0)))
@@ -34,6 +36,13 @@ class TicTacToe:
 
     def is_draw(self):
         return not np.any(self.board == 0)
+
+    def copy(self):
+        new_env = TicTacToe()
+        new_env.board = np.zeros((3, 3), dtype=int)
+        new_env.player = self.player
+        new_env.last_action = self.last_action
+        return new_env
 
     def display(self):
         pass
