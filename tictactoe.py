@@ -39,7 +39,7 @@ class TicTacToe:
 
     def copy(self):
         new_env = TicTacToe()
-        new_env.board = np.zeros((3, 3), dtype=int)
+        new_env.board = self.board.copy()
         new_env.player = self.player
         new_env.last_action = self.last_action
         return new_env
