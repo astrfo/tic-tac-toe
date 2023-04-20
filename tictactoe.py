@@ -4,16 +4,19 @@ class TicTacToe:
     def __init__(self):
         self.board = np.zeros((3, 3), dtype=int)
         self.player = 1
+        self.last_action = None
 
     def reset(self):
         self.board = np.zeros((3, 3), dtype=int)
         self.player = 1
+        self.last_action = None
 
     def play(self, action):
         row, col = action
         if self.board[row, col] == 0:
             self.board[row, col] = self.player
             self.player = 3 - self.player
+            self.last_action = action
 
     def get_valid_actions(self):
         return list(zip(*np.where(self.board == 0)))
