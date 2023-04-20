@@ -10,19 +10,20 @@ class Simulator:
     def run(self):
         self.env.reset()
         while not self.env.is_terminal():
-            print(self.env.board)
             if self.env.player == 1:
-                #人間側が入力
                 action = self.get_human_input()
             else:
-                #AI側が入力
                 action = self.policy.uct_search()
             self.env.play(action)
+            print(self.env.board)
+            print('=========================')
 
-        if self.env.is_draw():
-            print('Draw!!')
+        if self.env.is_winner(player=1):
+            print(f'Player wins!!')
+        elif self.env.is_winner(player=2):
+            print(f'AI wins!!')
         else:
-            print(f'Player {3 - self.env.player} wins!!')
+            print('Draw!!')
 
     def get_human_input(self):
         while True:
