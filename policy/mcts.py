@@ -42,7 +42,7 @@ class MonteCarloTreeSearch:
 
     def expand(self):
         #選択された葉ノードから未探索の行動を取ることで子ノードを追加して，木を拡張する
-        untried_actions = [a for a in self.env.get_valid_actions() if a not in [c.env.board for c in self.children]]
+        untried_actions = [a for a in self.env.get_valid_actions() if a not in [c.env.last_action for c in self.children]]
         action = random.choice(untried_actions)
         child_env = self.env.copy()
         child_env.play(action)
