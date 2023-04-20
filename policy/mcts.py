@@ -1,3 +1,6 @@
+import random
+import numpy as np
+
 class MonteCarloTreeSearch:
     def __init__(self, env):
         self.env = env
@@ -8,7 +11,12 @@ class MonteCarloTreeSearch:
 
     def rollout(self):
         #シミュレーションフェーズで使用．とりあえずランダム方策(ロールアウト方策)を実装
-        pass
+        while not self.env.is_terminal() and not self.env.is_draw():
+            actions = self.env.get_valid_actions()
+            action = random.choice(actions)
+            self.env.play(action)
+        #終端状態時のプレイヤーが勝っていたら報酬1
+        return 1 if self.env.is_winner(self.env.player) else 0
 
     def select(self):
         #根ノードから開始して，UCT方策(ツリー方策)を用いて葉ノードに向かって行動選択
