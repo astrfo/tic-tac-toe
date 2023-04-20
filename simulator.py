@@ -11,5 +11,10 @@ class Simulator:
         self.env.reset()
         while not self.env.is_terminal():
             print(self.env.board)
-            action = self.policy.uct_search()
+            if self.env.player == 1:
+                #人間側が入力
+                pass
+            else:
+                #AI側が入力
+                action = self.policy.uct_search()
             self.env.play(action)
