@@ -13,8 +13,11 @@ class Simulator:
             print(self.env.board)
             if self.env.player == 1:
                 #人間側が入力
-                pass
+                action = self.get_human_input()
             else:
                 #AI側が入力
                 action = self.policy.uct_search()
             self.env.play(action)
+
+    def get_human_input(self):
+        pass
