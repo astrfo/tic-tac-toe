@@ -50,7 +50,7 @@ class MonteCarloTreeSearch:
         self.wins += reward
         if self.parent is not None:
             #親ノードがある場合は伝播させる
-            pass
+            self.parent.backup(reward)
 
     def best_child(self):
         #子ノードの中で一番良いノードを選択
